@@ -1,0 +1,68 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Local agent and workflow configuration
+.agents/
+.claude/
+.codex/
+.scratch/
+
+# Editors and IDEs
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+
+# Environment files and credentials
+.env
+.env.*
+!.env.example
+*.mobileprovision
+*.p12
+*.pem
+
+# Logs, caches, and test output
+*.log
+.cache/
+coverage/
+tmp/
+.tmp/
+
+# Dart and Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+app.*.symbols
+app.*.map.json
+
+# Android
+android/.gradle/
+android/local.properties
+android/captures/
+
+# Apple platforms
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/ephemeral/
+macos/Pods/
+macos/.symlinks/
+macos/Flutter/ephemeral/
+DerivedData/
+
+# Node.js and TypeScript
+node_modules/
+dist/
+.nest/
+.nx/
+.turbo/
+*.tsbuildinfo
+
+# Supabase local state
+supabase/.temp/
