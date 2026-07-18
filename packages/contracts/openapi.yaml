@@ -1,0 +1,613 @@
+openapi: 3.1.0
+info:
+  title: Cirrava Mobile API
+  version: 0.1.0
+  description: >-
+    Provider-neutral contract for Cirrava's first flight-following vertical slice.
+    All identifiers in this contract are Cirrava identifiers; upstream provider
+    identifiers and provider-native status values are deliberately excluded.
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+servers:
+  - url: https://api.cirrava.example
+    description: Placeholder production origin
+tags:
+  - name: Flights
+  - name: Follows
+paths:
+  /v1/flights/search:
+    get:
+      operationId: searchFlights
+      summary: Search for a Supported Flight
+      description: >-
+        Searches operating flight numbers and Codeshare Aliases. departureDate is
+        interpreted as the scheduled local departure date at the origin airport.
+      tags: [Flights]
+      parameters:
+        - $ref: '#/components/parameters/FlightDesignatorQuery'
+        - $ref: '#/components/parameters/DepartureDateQuery'
+        - $ref: '#/components/parameters/OriginQuery'
+      responses:
+        '200':
+          description: Matching Supported Flights, ordered by scheduled departure.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlightSearchResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /v1/flights/{flightInstanceId}:
+    get:
+      operationId: getFlight
+      summary: Get the current normalized detail for a Flight Instance
+      tags: [Flights]
+      parameters:
+        - $ref: '#/components/parameters/FlightInstanceIdPath'
+      responses:
+        '200':
+          description: The canonical Flight Instance and its latest accepted snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlightDetail'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/follows:
+    get:
+      operationId: listFollows
+      summary: List visible Flight Follows for the current identity
+      description: >-
+        Returns Active Flight Follows and Completed Flight Follows still inside
+        their 24-hour read-only visibility window.
+      tags: [Follows]
+      security:
+        - bearerAuth: []
+        - anonymousSession: []
+      responses:
+        '200':
+          description: Visible follows with flight state suitable for local persistence.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlightFollowCollection'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createFollow
+      summary: Follow one canonical Flight Instance
+      description: >-
+        A Flight Follow expresses monitoring intent and does not assert that the
+        caller is a passenger. An Anonymous User may have only one Active Flight
+        Follow; exceeding that limit returns a machine-readable 409 response.
+      tags: [Follows]
+      security:
+        - bearerAuth: []
+        - anonymousSession: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKeyHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFlightFollowRequest'
+      responses:
+        '201':
+          description: Flight Follow created.
+          headers:
+            Location:
+              description: Relative URL of the created Flight Follow.
+              schema:
+                type: string
+                example: /v1/follows/20000000-0000-4000-8000-000000000001
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlightFollow'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: The current identity has reached its Active Flight Follow limit.
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/AnonymousFollowLimitProblem'
+                  - $ref: '#/components/schemas/AccountFollowLimitProblem'
+              examples:
+                anonymousLimit:
+                  summary: Anonymous User already has an Active Flight Follow
+                  value:
+                    type: https://cirrava.example/problems/anonymous-active-follow-limit
+                    title: Account required for another active follow
+                    status: 409
+                    detail: Anonymous users can follow one active flight at a time.
+                    code: anonymous_active_follow_limit
+                    existingFollowId: 20000000-0000-4000-8000-000000000001
+                    activeFollowLimit: 1
+                    accountConversionRequired: true
+  /v1/follows/{followId}:
+    delete:
+      operationId: deleteFollow
+      summary: Stop following a Flight Instance
+      description: >-
+        Idempotent so a locally applied offline unfollow can be retried. A missing
+        or already-deleted Follow produces the same 204 response.
+      tags: [Follows]
+      security:
+        - bearerAuth: []
+        - anonymousSession: []
+      parameters:
+        - $ref: '#/components/parameters/FollowIdPath'
+      responses:
+        '204':
+          description: The Flight Follow is no longer active for this identity.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Supabase-issued access token for an Account Holder.
+    anonymousSession:
+      type: apiKey
+      in: header
+      name: X-Cirrava-Anonymous-Token
+      description: Opaque Cirrava session token for an Anonymous User.
+  parameters:
+    FlightDesignatorQuery:
+      name: designator
+      in: query
+      required: true
+      description: Operating or marketing carrier designator and flight number.
+      schema:
+        type: string
+        minLength: 3
+        maxLength: 10
+        pattern: '^[A-Za-z0-9]{2,3}\s?[0-9]{1,4}[A-Za-z]?$'
+      example: QL217
+    DepartureDateQuery:
+      name: departureDate
+      in: query
+      required: true
+      description: Scheduled local departure date at the origin airport.
+      schema:
+        type: string
+        format: date
+      example: '2026-09-15'
+    OriginQuery:
+      name: origin
+      in: query
+      required: false
+      description: Optional IATA airport code used to disambiguate a designator.
+      schema:
+        $ref: '#/components/schemas/IataAirportCode'
+      example: JFK
+    FlightInstanceIdPath:
+      name: flightInstanceId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/CirravaId'
+    FollowIdPath:
+      name: followId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/CirravaId'
+    IdempotencyKeyHeader:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: Client-generated UUID retained across retries of this creation intent.
+      schema:
+        type: string
+        format: uuid
+  responses:
+    BadRequest:
+      description: Request parameters or body are invalid.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Unauthorized:
+      description: No valid Account Holder or Anonymous User identity was supplied.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    NotFound:
+      description: The requested Cirrava resource was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+  schemas:
+    CirravaId:
+      type: string
+      format: uuid
+      description: Immutable identifier assigned by Cirrava, never by a data provider.
+    IataAirportCode:
+      type: string
+      pattern: '^[A-Z]{3}$'
+    CarrierDesignatorCode:
+      type: string
+      minLength: 2
+      maxLength: 3
+      pattern: '^[A-Z0-9]{2,3}$'
+    FlightNumber:
+      type: string
+      pattern: '^[0-9]{1,4}[A-Z]?$'
+    Carrier:
+      type: object
+      additionalProperties: false
+      required: [designatorCode, name]
+      properties:
+        designatorCode:
+          $ref: '#/components/schemas/CarrierDesignatorCode'
+        name:
+          type: string
+          minLength: 1
+          description: Plain-text carrier name; no logo or protected artwork is implied.
+    OperatingService:
+      type: object
+      additionalProperties: false
+      required: [carrier, flightNumber, displayDesignator]
+      properties:
+        carrier:
+          $ref: '#/components/schemas/Carrier'
+        flightNumber:
+          $ref: '#/components/schemas/FlightNumber'
+        displayDesignator:
+          type: string
+          description: Preformatted plain-text operating designator.
+          example: QL 217
+    CodeshareAlias:
+      type: object
+      additionalProperties: false
+      required: [carrier, flightNumber, displayDesignator]
+      properties:
+        carrier:
+          $ref: '#/components/schemas/Carrier'
+        flightNumber:
+          $ref: '#/components/schemas/FlightNumber'
+        displayDesignator:
+          type: string
+          description: Preformatted plain-text marketing designator.
+          example: MW 8217
+    Airport:
+      type: object
+      additionalProperties: false
+      required: [iataCode, name, city, countryCode, timeZone]
+      properties:
+        iataCode:
+          $ref: '#/components/schemas/IataAirportCode'
+        name:
+          type: string
+          minLength: 1
+        city:
+          type: string
+          minLength: 1
+        countryCode:
+          type: string
+          pattern: '^[A-Z]{2}$'
+        timeZone:
+          type: string
+          description: IANA time-zone identifier used for locale-aware presentation.
+          example: America/New_York
+    FlightReference:
+      type: object
+      additionalProperties: false
+      description: A navigable reference to a distinct linked Flight Instance.
+      required:
+        - flightInstanceId
+        - operatingService
+        - origin
+        - destination
+        - scheduledLocalDepartureDate
+      properties:
+        flightInstanceId:
+          $ref: '#/components/schemas/CirravaId'
+        operatingService:
+          $ref: '#/components/schemas/OperatingService'
+        origin:
+          $ref: '#/components/schemas/Airport'
+        destination:
+          $ref: '#/components/schemas/Airport'
+        scheduledLocalDepartureDate:
+          type: string
+          format: date
+    FlightInstance:
+      type: object
+      additionalProperties: false
+      required:
+        - flightInstanceId
+        - operatingService
+        - codeshareAliases
+        - origin
+        - destination
+        - scheduledLocalDepartureDate
+      properties:
+        flightInstanceId:
+          $ref: '#/components/schemas/CirravaId'
+        operatingService:
+          $ref: '#/components/schemas/OperatingService'
+        codeshareAliases:
+          type: array
+          items:
+            $ref: '#/components/schemas/CodeshareAlias'
+          uniqueItems: true
+        origin:
+          $ref: '#/components/schemas/Airport'
+        destination:
+          $ref: '#/components/schemas/Airport'
+        scheduledLocalDepartureDate:
+          type: string
+          format: date
+          description: Matching attribute, not the identity of the Flight Instance.
+        replacementFlight:
+          $ref: '#/components/schemas/FlightReference'
+          description: >-
+            Present only when a separate Flight Instance has been designated to
+            replace this cancelled operation. A Follow does not transfer automatically.
+        replacesFlightInstanceId:
+          $ref: '#/components/schemas/CirravaId'
+          description: Present only on a Flight Instance that replaces another operation.
+    FlightPhase:
+      type: string
+      description: The single current stage of the operation, independent of disruptions.
+      enum:
+        - scheduled
+        - check_in
+        - boarding
+        - gate_closed
+        - departed
+        - en_route
+        - landed
+        - arrived_at_gate
+    DisruptionCondition:
+      type: string
+      description: An active condition that may coexist with any valid Flight Phase.
+      enum:
+        - delayed
+        - cancelled
+        - diverted
+        - returned_to_gate
+    TerminalOutcome:
+      type: string
+      enum:
+        - arrived_at_gate
+        - cancelled
+        - completed_diversion
+    FlightTimes:
+      type: object
+      additionalProperties: false
+      required: [scheduled]
+      properties:
+        scheduled:
+          type: string
+          format: date-time
+          description: Current scheduled instant in UTC.
+        estimated:
+          type: string
+          format: date-time
+          description: Latest estimated instant in UTC, when available.
+        actual:
+          type: string
+          format: date-time
+          description: Actual instant in UTC, when confirmed.
+    FlightEndpointState:
+      type: object
+      additionalProperties: false
+      required: [times]
+      properties:
+        terminal:
+          type: string
+          minLength: 1
+        gate:
+          type: string
+          minLength: 1
+        times:
+          $ref: '#/components/schemas/FlightTimes'
+    FlightDelay:
+      type: object
+      additionalProperties: false
+      required: [departureMinutes, arrivalMinutes, isMaterial]
+      properties:
+        departureMinutes:
+          type: integer
+          minimum: 0
+        arrivalMinutes:
+          type: integer
+          minimum: 0
+        isMaterial:
+          type: boolean
+          description: True when departure or arrival delay is at least 15 minutes.
+    DataFreshness:
+      type: object
+      additionalProperties: false
+      description: >-
+        Freshness evaluated by the API at evaluatedAt. A caching client preserves
+        observedAt and recalculates age as its wall clock advances.
+      required: [evaluatedAt, ageSeconds, staleAfterSeconds, classification]
+      properties:
+        evaluatedAt:
+          type: string
+          format: date-time
+        ageSeconds:
+          type: integer
+          minimum: 0
+        staleAfterSeconds:
+          type: integer
+          minimum: 1
+        classification:
+          type: string
+          enum: [fresh, stale]
+    FlightSnapshot:
+      type: object
+      additionalProperties: false
+      description: Latest accepted normalized provider observation.
+      required:
+        - snapshotId
+        - flightInstanceId
+        - observedAt
+        - acceptedAt
+        - freshness
+        - phase
+        - disruptionConditions
+        - departure
+        - arrival
+        - delay
+      properties:
+        snapshotId:
+          $ref: '#/components/schemas/CirravaId'
+        flightInstanceId:
+          $ref: '#/components/schemas/CirravaId'
+        observedAt:
+          type: string
+          format: date-time
+          description: Instant represented by the normalized observation.
+        acceptedAt:
+          type: string
+          format: date-time
+          description: Instant Cirrava durably accepted this snapshot.
+        freshness:
+          $ref: '#/components/schemas/DataFreshness'
+        phase:
+          $ref: '#/components/schemas/FlightPhase'
+        disruptionConditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/DisruptionCondition'
+          uniqueItems: true
+        departure:
+          $ref: '#/components/schemas/FlightEndpointState'
+        arrival:
+          $ref: '#/components/schemas/FlightEndpointState'
+        delay:
+          $ref: '#/components/schemas/FlightDelay'
+        terminalOutcome:
+          $ref: '#/components/schemas/TerminalOutcome'
+    FlightDetail:
+      type: object
+      additionalProperties: false
+      required: [flight, currentSnapshot]
+      properties:
+        flight:
+          $ref: '#/components/schemas/FlightInstance'
+        currentSnapshot:
+          $ref: '#/components/schemas/FlightSnapshot'
+    FlightSearchResponse:
+      type: object
+      additionalProperties: false
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlightDetail'
+          maxItems: 25
+    CreateFlightFollowRequest:
+      type: object
+      additionalProperties: false
+      required: [flightInstanceId]
+      properties:
+        flightInstanceId:
+          $ref: '#/components/schemas/CirravaId'
+    FlightFollowState:
+      type: string
+      enum: [active, completed]
+    FlightFollow:
+      type: object
+      additionalProperties: false
+      required: [followId, state, createdAt, flight]
+      properties:
+        followId:
+          $ref: '#/components/schemas/CirravaId'
+        state:
+          $ref: '#/components/schemas/FlightFollowState'
+        createdAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+          description: Present after server-confirmed terminal outcome and reconciliation.
+        visibleUntil:
+          type: string
+          format: date-time
+          description: >-
+            Present for a Completed Flight Follow; it leaves the visible v1 experience
+            after this instant.
+        flight:
+          $ref: '#/components/schemas/FlightDetail'
+    FlightFollowCollection:
+      type: object
+      additionalProperties: false
+      required: [items, activeFollowCount, activeFollowLimit]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlightFollow'
+        activeFollowCount:
+          type: integer
+          minimum: 0
+        activeFollowLimit:
+          type: integer
+          minimum: 1
+          description: One for an Anonymous User and five for a v1 Account Holder.
+    Problem:
+      type: object
+      additionalProperties: true
+      required: [type, title, status, detail, code]
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          minimum: 400
+          maximum: 599
+        detail:
+          type: string
+        code:
+          type: string
+          description: Stable machine-readable Cirrava error code.
+        instance:
+          type: string
+          format: uri-reference
+    AnonymousFollowLimitProblem:
+      allOf:
+        - $ref: '#/components/schemas/Problem'
+        - type: object
+          required:
+            - existingFollowId
+            - activeFollowLimit
+            - accountConversionRequired
+          properties:
+            code:
+              const: anonymous_active_follow_limit
+            existingFollowId:
+              $ref: '#/components/schemas/CirravaId'
+            activeFollowLimit:
+              const: 1
+            accountConversionRequired:
+              const: true
+    AccountFollowLimitProblem:
+      allOf:
+        - $ref: '#/components/schemas/Problem'
+        - type: object
+          required: [activeFollowLimit]
+          properties:
+            code:
+              const: account_active_follow_limit
+            activeFollowLimit:
+              const: 5

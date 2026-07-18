@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js" integrity="sha384-Ukv1p/xTma6P4/2bY5KzWBw+ydSpXmhCMtyciIQVDJ1RmOxtCYNMF1uXT9T63H67" crossorigin="anonymous"></script>
+</helmet>
+<div style="width:376px;background:#000;border-radius:46px;padding:9px;box-shadow:0 30px 70px -18px rgba(10,20,60,.75),0 0 0 1px rgba(255,255,255,.06)">
+<div style="position:relative;height:788px;border-radius:38px;overflow:hidden;background:#05070f;font-family:'Space Grotesk',system-ui,sans-serif;color:#eaf0ff">
+
+<div style="position:relative;z-index:6;display:flex;align-items:center;justify-content:space-between;padding:14px 26px 4px;font-size:14px;font-weight:600">
+<span>9:41</span>
+<div style="position:absolute;left:50%;top:16px;transform:translateX(-50%);width:9px;height:9px;background:#000;border-radius:50%"></div>
+<span style="font-size:12px;letter-spacing:1px">5G ▮▮▮▯</span>
+</div>
+
+<x-import component-from-global-scope="contrail-globe" from="./geo-globe.js" data-mode="passport" data-w="358" data-h="262" style="margin-top:4px" hint-size="358px,262px"></x-import>
+
+<div style="text-align:center;padding:6px 30px 0">
+<div style="font-size:13px;letter-spacing:7px;color:#8296c9;font-family:'Space Mono',monospace;font-weight:700">CONTRAIL</div>
+<div style="font-size:28px;font-weight:700;letter-spacing:-.5px;line-height:1.2;margin-top:10px">The flight companion for <span style="color:#ffb454">every</span> phone.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;padding:20px 34px 0;font-size:14px;color:#c6d2f2">
+<div style="display:flex;align-items:center;gap:12px"><span style="width:7px;height:7px;flex:none;border-radius:50%;background:#ffb454;box-shadow:0 0 8px #ffb454"></span>Alerts faster than the airline — gates, delays, cancellations</div>
+<div style="display:flex;align-items:center;gap:12px"><span style="width:7px;height:7px;flex:none;border-radius:50%;background:#6fd8ff;box-shadow:0 0 8px #6fd8ff"></span>Knows where your plane is, 25 hours before you fly</div>
+<div style="display:flex;align-items:center;gap:12px"><span style="width:7px;height:7px;flex:none;border-radius:50%;background:#a98bff;box-shadow:0 0 8px #a98bff"></span>Equally beautiful on Android, iOS and tablets</div>
+</div>
+
+<div style="position:absolute;left:24px;right:24px;bottom:44px;display:flex;flex-direction:column;gap:11px">
+<div style="background:#eaf0ff;color:#0a1022;border-radius:16px;padding:16px;text-align:center;font-size:15.5px;font-weight:700">Continue with Google</div>
+<div style="border:1.5px solid rgba(130,150,201,.4);border-radius:16px;padding:15px;text-align:center;font-size:15.5px;font-weight:600;color:#eaf0ff">Continue with Apple</div>
+<div style="text-align:center;font-size:13px;color:#5d6a94;margin-top:4px">or explore with a sample flight</div>
+<div style="display:flex;gap:7px;justify-content:center;margin-top:6px">
+<span style="width:18px;height:5px;border-radius:3px;background:#ffb454"></span>
+<span style="width:5px;height:5px;border-radius:50%;background:#2a3350"></span>
+<span style="width:5px;height:5px;border-radius:50%;background:#2a3350"></span>
+</div>
+</div>
+
+<div style="position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:110px;height:4px;border-radius:2px;background:#eaf0ff;opacity:.5;z-index:6"></div>
+
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:376,&quot;height&quot;:806}}"></script>
+</body>
+</html>

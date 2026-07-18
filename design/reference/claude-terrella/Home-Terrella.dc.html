@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js" integrity="sha384-Ukv1p/xTma6P4/2bY5KzWBw+ydSpXmhCMtyciIQVDJ1RmOxtCYNMF1uXT9T63H67" crossorigin="anonymous"></script>
+<style>@keyframes hmPulse { 0%,100%{ opacity:.5 } 50%{ opacity:1 } }</style>
+</helmet>
+<div style="width:376px;background:#000;border-radius:46px;padding:9px;box-shadow:0 30px 70px -18px rgba(10,20,60,.75),0 0 0 1px rgba(255,255,255,.06)">
+<div style="position:relative;height:788px;border-radius:38px;overflow:hidden;background:#05070f;font-family:'Space Grotesk',system-ui,sans-serif;color:#eaf0ff">
+
+<div style="position:relative;z-index:6;display:flex;align-items:center;justify-content:space-between;padding:14px 26px 4px;font-size:14px;font-weight:600">
+<span>9:41</span>
+<sc-if value="{{ isIos }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;left:50%;top:11px;transform:translateX(-50%);width:104px;height:30px;background:#000;border-radius:20px"></div></sc-if>
+<sc-if value="{{ isAndroid }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;left:50%;top:16px;transform:translateX(-50%);width:9px;height:9px;background:#000;border-radius:50%"></div></sc-if>
+<span style="font-size:12px;letter-spacing:1px">5G ▮▮▮▯</span>
+</div>
+
+<div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px 0">
+<span style="font-size:12px;letter-spacing:5px;color:#8296c9">CONTRAIL</span>
+<span style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#ffb454,#a98bff);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:#05070f">R</span>
+</div>
+<div style="padding:14px 24px 0;font-size:30px;font-weight:700;letter-spacing:-.5px">Your trips</div>
+
+<!-- next-up hero -->
+<div style="margin:16px 18px 0;border-radius:20px;overflow:hidden;background:#0a1022;border:1px solid rgba(255,180,84,.35);box-shadow:0 0 32px -8px rgba(255,180,84,.25)">
+<div style="position:relative;height:172px;background:radial-gradient(120% 120% at 50% 0%,#101b3d 0%,#0a1022 80%)">
+<x-import component-from-global-scope="contrail-map" from="./geo-map.js" data-pad-top="14" data-fit-bottom=".92" data-w="322" data-h="172" hint-size="322px,172px"></x-import>
+<div style="position:absolute;top:12px;left:14px;display:flex;align-items:center;gap:7px;background:rgba(48,26,6,.75);border:1px solid rgba(255,180,84,.45);border-radius:16px;padding:5px 11px">
+<span style="width:6px;height:6px;border-radius:50%;background:#ffb454;box-shadow:0 0 8px #ffb454;animation:hmPulse 1.5s ease-in-out infinite"></span>
+<span style="font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:#ffcd8a">DELAYED +45</span>
+</div>
+</div>
+<div style="display:flex;align-items:flex-end;justify-content:space-between;padding:14px 18px 16px">
+<div>
+<div style="font-family:'Space Mono',monospace;font-size:24px;font-weight:700;letter-spacing:-1px">SFO<span style="color:#5d6a94;font-size:17px;letter-spacing:0"> → </span>JFK</div>
+<div style="font-size:12.5px;color:#8296c9;margin-top:4px">Today · NW 472 · your plane lands SFO 4:55 PM</div>
+</div>
+<div style="text-align:right"><div style="font-size:11px;letter-spacing:2px;color:#8296c9">DEPARTS</div><div style="font-size:22px;font-weight:700;color:#ffb454">6:25 PM</div></div>
+</div>
+</div>
+
+<!-- upcoming rows -->
+<div style="display:flex;flex-direction:column;gap:10px;padding:16px 18px 0">
+<div style="display:flex;align-items:center;gap:14px;background:#0a0f1e;border:1px solid rgba(120,150,220,.14);border-radius:16px;padding:15px 16px">
+<span style="width:7px;height:7px;flex:none;border-radius:50%;background:#6fd8ff;box-shadow:0 0 8px #6fd8ff"></span>
+<div style="flex:1"><div style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700">JFK → SFO</div><div style="font-size:12px;color:#8296c9;margin-top:2px">Sun 27 Jul · NW 473 · on time</div></div>
+<div style="font-family:'Space Mono',monospace;font-size:14px;color:#c6d2f2">8:05A</div>
+</div>
+<div style="display:flex;align-items:center;gap:14px;background:#0a0f1e;border:1px solid rgba(120,150,220,.14);border-radius:16px;padding:15px 16px">
+<span style="width:7px;height:7px;flex:none;border-radius:50%;border:1.5px solid #5d6a94;box-sizing:border-box"></span>
+<div style="flex:1"><div style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700">SFO → HNL</div><div style="font-size:12px;color:#8296c9;margin-top:2px">Fri 14 Aug · NW 88 · scheduled</div></div>
+<div style="font-family:'Space Mono',monospace;font-size:14px;color:#c6d2f2">11:20A</div>
+</div>
+</div>
+
+<!-- add flight: iOS inline row / Android FAB -->
+<sc-if value="{{ isIos }}" hint-placeholder-val="{{ true }}"><div style="margin:16px 18px 0;border:1.5px dashed rgba(130,150,201,.4);border-radius:16px;padding:14px;display:flex;align-items:center;justify-content:center;gap:10px;color:#8296c9">
+<span style="font-size:18px;line-height:1">+</span><span style="font-size:13.5px">Track a flight — airline, number, date</span>
+</div></sc-if>
+<sc-if value="{{ isAndroid }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;right:20px;bottom:112px;z-index:8;width:60px;height:60px;border-radius:18px;background:#ffb454;color:#241505;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:600;box-shadow:0 10px 24px -6px rgba(255,180,84,.55)">+</div></sc-if>
+
+<!-- bottom nav: M3 bar vs iOS tab bar -->
+<sc-if value="{{ isAndroid }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;background:#0c1226;padding:12px 8px 22px">
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><span style="width:52px;height:30px;border-radius:16px;background:rgba(255,180,84,.2);display:flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;background:#ffb454;transform:rotate(45deg);border-radius:2px"></span></span><span style="font-size:11px;font-weight:700;color:#ffcd8a">Trips</span></div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><span style="width:52px;height:30px;border-radius:16px;display:flex;align-items:center;justify-content:center"><span style="width:14px;height:14px;border:2px solid #8296c9;border-radius:50%"></span></span><span style="font-size:11px;color:#8296c9">Radar</span></div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><span style="width:52px;height:30px;border-radius:16px;display:flex;align-items:center;justify-content:center"><span style="width:13px;height:16px;border:2px solid #8296c9;border-radius:3px"></span></span><span style="font-size:11px;color:#8296c9">Passport</span></div>
+</div>
+<div style="position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:110px;height:4px;border-radius:2px;background:#eaf0ff;opacity:.5;z-index:8"></div></sc-if>
+<sc-if value="{{ isIos }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:0;right:0;bottom:0;display:flex;background:rgba(8,11,22,.9);border-top:1px solid rgba(120,150,220,.14);padding:10px 0 28px;backdrop-filter:blur(14px)">
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><span style="width:14px;height:14px;background:#ffb454;transform:rotate(45deg);border-radius:2px"></span><span style="font-size:10.5px;font-weight:600;color:#ffb454">Trips</span></div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><span style="width:14px;height:14px;border:2px solid #5d6a94;border-radius:50%;box-sizing:border-box"></span><span style="font-size:10.5px;color:#5d6a94">Radar</span></div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><span style="width:12px;height:15px;border:2px solid #5d6a94;border-radius:3px;box-sizing:border-box"></span><span style="font-size:10.5px;color:#5d6a94">Passport</span></div>
+</div>
+<div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:130px;height:5px;border-radius:3px;background:#eaf0ff;opacity:.85;z-index:8"></div></sc-if>
+
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:376,&quot;height&quot;:806},&quot;platform&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;android&quot;,&quot;ios&quot;],&quot;default&quot;:&quot;android&quot;,&quot;tsType&quot;:&quot;'android'|'ios'&quot;}}">class Component extends DCLogic {
+  renderVals() {
+    const p = this.props.platform || 'android';
+    return { isIos: p === 'ios', isAndroid: p !== 'ios' };
+  }
+}</script>
+</body>
+</html>

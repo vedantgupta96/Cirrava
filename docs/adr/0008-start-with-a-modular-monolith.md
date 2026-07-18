@@ -1,0 +1,3 @@
+# Start with a modular monolith
+
+Cirrava uses one TypeScript backend codebase built with NestJS and the Fastify adapter, with explicit domain modules and separate API and worker process entry points. NestJS provides module boundaries, dependency injection, validation, testing seams, and OpenAPI integration, while Fastify supplies the HTTP runtime. Modules share one deployment boundary and database while keeping provider integration, normalization, flight state, events, following, notifications, identity, and account concerns separated behind internal interfaces. Workers may scale independently, but modules do not become networked microservices until measured operational or organizational constraints justify the migration.

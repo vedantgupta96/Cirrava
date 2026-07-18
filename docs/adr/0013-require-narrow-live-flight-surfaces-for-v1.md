@@ -1,0 +1,9 @@
+# Require narrow Live Flight Surfaces for v1
+
+Public v1 requires a Live Flight Surface for an Active Flight Follow on both supported phone platforms, assuming the physical-device spikes in ADR 0007 pass. The surface shows only the current Flight Phase, relevant scheduled or estimated time, Material Delay, terminal and gate information, and terminal outcome. It starts, updates, and ends from the same normalized server state and Notification Decisions used by the main application.
+
+The v1 surface excludes maps, aircraft animation, route telemetry, baggage-claim information, secondary actions, and independent provider access. Baggage-claim information is excluded even when a provider supplies it; Cirrava does not expose the technical-architecture baseline's optional baggage-belt field. The surface's purpose is glanceable operational awareness without repeatedly opening the app. The narrow scope keeps the feature aligned with Cirrava's core job while containing native integration, update-budget, and platform-policy risk.
+
+The surface starts automatically three hours before scheduled departure, or immediately when a Follow is created inside that window. Earlier disruptions remain eligible for ordinary notifications without maintaining a live surface. After a reconciled terminal outcome, Cirrava ends the live lifecycle and leaves the final state visible for one hour before dismissal.
+
+Public v1 launches on iPhone and Android phones together. The minimum iPhone version is iOS 17.2 so the server can remotely start a Live Activity when a followed flight becomes imminent. The minimum Android version is Android 10/API 29; Android 16/API 36 and newer receive a promoted Live Update, while Android 10 through 15 receive a persistent, updating flight-status notification. iPad, tablets, web, desktop, and wearables are not supported v1 targets.

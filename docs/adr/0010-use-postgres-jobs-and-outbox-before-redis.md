@@ -1,0 +1,3 @@
+# Use PostgreSQL jobs and an outbox before Redis
+
+Cirrava v1 uses a PostgreSQL-backed durable job queue for scheduled polling, retries, deduplication, and worker coordination, together with a transactional outbox so committed Flight Events and Notification Decisions cannot be lost between the database and worker dispatch. Redis and BullMQ are deferred until measured throughput, contention, or latency demonstrates that PostgreSQL is insufficient. This reduces early operational complexity at the cost of monitoring queue load and preserving a replaceable job abstraction. This decision supersedes the planning baseline's requirement to operate Redis from the beginning.

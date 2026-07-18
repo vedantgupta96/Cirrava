@@ -1,0 +1,29 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "meta": {
+    "mood": "Red-eye departure board at first light: quiet graphite, crisp white, one signal-rose.",
+    "strategy": "restrained",
+    "sourceSpace": "oklch"
+  },
+  "light": {
+    "background": "oklch(1 0 0)",
+    "surface": "oklch(0.965 0.006 340)",
+    "ink": "oklch(0.20 0.025 340)",
+    "muted": "oklch(0.52 0.02 340)",
+    "primary": "oklch(0.50 0.20 340)",
+    "accent": "oklch(0.70 0.13 215)"
+  },
+  "dark": {
+    "background": "oklch(0.12 0 0)",
+    "surface": "oklch(0.18 0.008 340)",
+    "ink": "oklch(0.95 0.005 340)",
+    "muted": "oklch(0.72 0.012 340)",
+    "primary": "oklch(0.72 0.16 340)",
+    "accent": "oklch(0.78 0.11 215)"
+  },
+  "status": {
+    "onTime": "oklch(0.46 0.12 155)",
+    "delayed": "oklch(0.56 0.16 60)",
+    "cancelled": "oklch(0.48 0.18 25)"
+  }
+}

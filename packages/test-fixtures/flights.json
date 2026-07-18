@@ -1,0 +1,235 @@
+{
+  "contractVersion": "0.1.0",
+  "flights": [
+    {
+      "flight": {
+        "flightInstanceId": "10000000-0000-4000-8000-000000000001",
+        "operatingService": {
+          "carrier": {
+            "designatorCode": "ND",
+            "name": "Northwind Demo Air"
+          },
+          "flightNumber": "410",
+          "displayDesignator": "ND 410"
+        },
+        "codeshareAliases": [],
+        "origin": {
+          "iataCode": "SFO",
+          "name": "San Francisco International Airport",
+          "city": "San Francisco",
+          "countryCode": "US",
+          "timeZone": "America/Los_Angeles"
+        },
+        "destination": {
+          "iataCode": "SEA",
+          "name": "Seattle-Tacoma International Airport",
+          "city": "Seattle",
+          "countryCode": "US",
+          "timeZone": "America/Los_Angeles"
+        },
+        "scheduledLocalDepartureDate": "2026-09-15"
+      },
+      "currentSnapshot": {
+        "snapshotId": "11000000-0000-4000-8000-000000000001",
+        "flightInstanceId": "10000000-0000-4000-8000-000000000001",
+        "observedAt": "2026-09-15T14:14:40Z",
+        "acceptedAt": "2026-09-15T14:14:43Z",
+        "freshness": {
+          "evaluatedAt": "2026-09-15T14:14:45Z",
+          "ageSeconds": 5,
+          "staleAfterSeconds": 300,
+          "classification": "fresh"
+        },
+        "phase": "boarding",
+        "disruptionConditions": [],
+        "departure": {
+          "terminal": "2",
+          "gate": "D8",
+          "times": {
+            "scheduled": "2026-09-15T15:30:00Z",
+            "estimated": "2026-09-15T15:30:00Z"
+          }
+        },
+        "arrival": {
+          "terminal": "N",
+          "gate": "N12",
+          "times": {
+            "scheduled": "2026-09-15T17:38:00Z",
+            "estimated": "2026-09-15T17:38:00Z"
+          }
+        },
+        "delay": {
+          "departureMinutes": 0,
+          "arrivalMinutes": 0,
+          "isMaterial": false
+        }
+      }
+    },
+    {
+      "flight": {
+        "flightInstanceId": "10000000-0000-4000-8000-000000000002",
+        "operatingService": {
+          "carrier": {
+            "designatorCode": "QL",
+            "name": "Quill Demo Airways"
+          },
+          "flightNumber": "217",
+          "displayDesignator": "QL 217"
+        },
+        "codeshareAliases": [
+          {
+            "carrier": {
+              "designatorCode": "MW",
+              "name": "Meridian Wings Demo"
+            },
+            "flightNumber": "8217",
+            "displayDesignator": "MW 8217"
+          }
+        ],
+        "origin": {
+          "iataCode": "JFK",
+          "name": "John F. Kennedy International Airport",
+          "city": "New York",
+          "countryCode": "US",
+          "timeZone": "America/New_York"
+        },
+        "destination": {
+          "iataCode": "LHR",
+          "name": "London Heathrow Airport",
+          "city": "London",
+          "countryCode": "GB",
+          "timeZone": "Europe/London"
+        },
+        "scheduledLocalDepartureDate": "2026-09-15"
+      },
+      "currentSnapshot": {
+        "snapshotId": "11000000-0000-4000-8000-000000000002",
+        "flightInstanceId": "10000000-0000-4000-8000-000000000002",
+        "observedAt": "2026-09-15T21:45:00Z",
+        "acceptedAt": "2026-09-15T21:45:04Z",
+        "freshness": {
+          "evaluatedAt": "2026-09-15T21:45:45Z",
+          "ageSeconds": 45,
+          "staleAfterSeconds": 300,
+          "classification": "fresh"
+        },
+        "phase": "boarding",
+        "disruptionConditions": [
+          "delayed"
+        ],
+        "departure": {
+          "terminal": "7",
+          "gate": "9",
+          "times": {
+            "scheduled": "2026-09-15T22:00:00Z",
+            "estimated": "2026-09-15T23:15:00Z"
+          }
+        },
+        "arrival": {
+          "terminal": "4",
+          "gate": "16",
+          "times": {
+            "scheduled": "2026-09-16T05:55:00Z",
+            "estimated": "2026-09-16T07:10:00Z"
+          }
+        },
+        "delay": {
+          "departureMinutes": 75,
+          "arrivalMinutes": 75,
+          "isMaterial": true
+        }
+      }
+    },
+    {
+      "flight": {
+        "flightInstanceId": "10000000-0000-4000-8000-000000000003",
+        "operatingService": {
+          "carrier": {
+            "designatorCode": "PN",
+            "name": "Pioneer Demo Airlines"
+          },
+          "flightNumber": "604",
+          "displayDesignator": "PN 604"
+        },
+        "codeshareAliases": [],
+        "origin": {
+          "iataCode": "ORD",
+          "name": "O'Hare International Airport",
+          "city": "Chicago",
+          "countryCode": "US",
+          "timeZone": "America/Chicago"
+        },
+        "destination": {
+          "iataCode": "MIA",
+          "name": "Miami International Airport",
+          "city": "Miami",
+          "countryCode": "US",
+          "timeZone": "America/New_York"
+        },
+        "scheduledLocalDepartureDate": "2026-09-15",
+        "replacementFlight": {
+          "flightInstanceId": "10000000-0000-4000-8000-000000000004",
+          "operatingService": {
+            "carrier": {
+              "designatorCode": "PN",
+              "name": "Pioneer Demo Airlines"
+            },
+            "flightNumber": "1604",
+            "displayDesignator": "PN 1604"
+          },
+          "origin": {
+            "iataCode": "ORD",
+            "name": "O'Hare International Airport",
+            "city": "Chicago",
+            "countryCode": "US",
+            "timeZone": "America/Chicago"
+          },
+          "destination": {
+            "iataCode": "MIA",
+            "name": "Miami International Airport",
+            "city": "Miami",
+            "countryCode": "US",
+            "timeZone": "America/New_York"
+          },
+          "scheduledLocalDepartureDate": "2026-09-15"
+        }
+      },
+      "currentSnapshot": {
+        "snapshotId": "11000000-0000-4000-8000-000000000003",
+        "flightInstanceId": "10000000-0000-4000-8000-000000000003",
+        "observedAt": "2026-09-15T12:00:00Z",
+        "acceptedAt": "2026-09-15T12:00:05Z",
+        "freshness": {
+          "evaluatedAt": "2026-09-15T12:00:30Z",
+          "ageSeconds": 30,
+          "staleAfterSeconds": 300,
+          "classification": "fresh"
+        },
+        "phase": "scheduled",
+        "disruptionConditions": [
+          "cancelled"
+        ],
+        "departure": {
+          "terminal": "3",
+          "gate": "H11",
+          "times": {
+            "scheduled": "2026-09-15T14:20:00Z"
+          }
+        },
+        "arrival": {
+          "terminal": "N",
+          "gate": "D42",
+          "times": {
+            "scheduled": "2026-09-15T18:35:00Z"
+          }
+        },
+        "delay": {
+          "departureMinutes": 0,
+          "arrivalMinutes": 0,
+          "isMaterial": false
+        },
+        "terminalOutcome": "cancelled"
+      }
+    }
+  ]
+}

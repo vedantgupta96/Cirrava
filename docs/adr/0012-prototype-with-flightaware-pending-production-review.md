@@ -1,0 +1,5 @@
+# Prototype with FlightAware pending production review
+
+Cirrava selects FlightAware AeroAPI Standard as the leading provider for a live technical prototype, not as the final production provider and not as authorization to begin paid service. Development starts against provider-neutral contracts, recorded fixtures, and deterministic scenarios. A paid Standard month begins only when the adapter, normalization, event derivation, and cost instrumentation are ready for live validation; it is not kept active without a defined validation objective.
+
+Production selection requires written confirmation that Cirrava's B2C display, notifications, normalized snapshots and events, offline device cache, retention, and future provider strategy comply with the applicable license. It also requires measuring coverage, latency, alert behavior, and cost across representative U.S.-linked flights and comparing those results with a Cirium trial and commercial proposal. This limits early spend while preserving an architecture that can replace the provider without changing Cirrava's domain model.

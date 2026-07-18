@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>@keyframes srCaret { 0%,45%{ opacity:1 } 50%,100%{ opacity:0 } }</style>
+</helmet>
+<div style="width:376px;background:#000;border-radius:46px;padding:9px;box-shadow:0 30px 70px -18px rgba(10,20,60,.75),0 0 0 1px rgba(255,255,255,.06)">
+<div style="position:relative;height:788px;border-radius:38px;overflow:hidden;background:#05070f;font-family:'Space Grotesk',system-ui,sans-serif;color:#eaf0ff">
+
+<div style="position:relative;z-index:6;display:flex;align-items:center;justify-content:space-between;padding:14px 26px 4px;font-size:14px;font-weight:600">
+<span>9:41</span>
+<div style="position:absolute;left:50%;top:16px;transform:translateX(-50%);width:9px;height:9px;background:#000;border-radius:50%"></div>
+<span style="font-size:12px;letter-spacing:1px">5G ▮▮▮▯</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:14px;padding:16px 24px 0">
+<span style="width:34px;height:34px;border-radius:50%;background:rgba(120,150,220,.12);display:flex;align-items:center;justify-content:center;color:#8296c9;font-size:18px">‹</span>
+<span style="font-size:22px;font-weight:700">Track a flight</span>
+</div>
+
+<!-- search field -->
+<div style="margin:18px 18px 0;background:#0a1022;border:1.5px solid #6fd8ff;border-radius:18px;padding:18px 20px;box-shadow:0 0 26px -8px rgba(111,216,255,.4)">
+<div style="font-size:10px;letter-spacing:2px;color:#8296c9;font-family:'Space Mono',monospace">AIRLINE + FLIGHT NUMBER</div>
+<div style="display:flex;align-items:center;margin-top:8px">
+<span style="font-family:'Space Mono',monospace;font-size:32px;font-weight:700;letter-spacing:1px">NW 47</span>
+<span style="width:3px;height:34px;background:#6fd8ff;margin-left:3px;animation:srCaret 1.1s step-end infinite"></span>
+</div>
+</div>
+<div style="display:flex;gap:8px;padding:12px 18px 0;font-family:'Space Mono',monospace">
+<span style="background:rgba(111,216,255,.14);border:1px solid rgba(111,216,255,.5);border-radius:16px;padding:7px 13px;font-size:11px;font-weight:700;color:#6fd8ff">TODAY</span>
+<span style="border:1px solid rgba(120,150,220,.25);border-radius:16px;padding:7px 13px;font-size:11px;color:#8296c9">TOMORROW</span>
+<span style="border:1px solid rgba(120,150,220,.25);border-radius:16px;padding:7px 13px;font-size:11px;color:#8296c9">BY ROUTE ▸</span>
+</div>
+
+<!-- results -->
+<div style="display:flex;flex-direction:column;gap:10px;padding:18px 18px 0">
+<div style="display:flex;align-items:center;gap:14px;background:#0a0f1e;border:1px solid rgba(120,150,220,.14);border-radius:16px;padding:14px 16px">
+<div style="flex:1"><div style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700">NW 472 · SFO → JFK</div><div style="font-size:12px;color:#8296c9;margin-top:3px">5:40 PM · Northwind · A321neo</div></div>
+<span style="background:#ffb454;color:#241505;border-radius:11px;padding:9px 14px;font-size:12.5px;font-weight:700">Track</span>
+</div>
+<div style="display:flex;align-items:center;gap:14px;background:#0a0f1e;border:1px solid rgba(120,150,220,.14);border-radius:16px;padding:14px 16px;opacity:.75">
+<div style="flex:1"><div style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700">NW 473 · JFK → SFO</div><div style="font-size:12px;color:#8296c9;margin-top:3px">8:05 AM · Northwind · A321neo</div></div>
+<span style="border:1px solid rgba(255,180,84,.5);color:#ffb454;border-radius:11px;padding:8px 13px;font-size:12.5px;font-weight:700">Track</span>
+</div>
+</div>
+<div style="padding:14px 26px 0;font-size:12.5px;color:#5d6a94">Or paste a confirmation email — we'll find every leg.</div>
+
+<!-- keyboard -->
+<div style="position:absolute;left:0;right:0;bottom:0;background:#0b101f;padding:10px 6px 30px">
+<div style="display:flex;gap:5px;justify-content:center">
+<span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">Q</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">W</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">E</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">R</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">T</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">Y</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">U</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">I</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">O</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">P</span>
+</div>
+<div style="display:flex;gap:5px;justify-content:center;margin-top:7px">
+<span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">A</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">S</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">D</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">F</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">G</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">H</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">J</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">K</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">L</span>
+</div>
+<div style="display:flex;gap:5px;justify-content:center;margin-top:7px">
+<span style="width:46px;height:42px;background:#232c4a;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px">⇧</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">Z</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">X</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">C</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">V</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">B</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">N</span><span style="width:30px;height:42px;background:#1a2138;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">M</span><span style="width:46px;height:42px;background:#232c4a;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px">⌫</span>
+</div>
+<div style="display:flex;gap:5px;justify-content:center;margin-top:7px">
+<span style="width:64px;height:42px;background:#232c4a;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px">123</span><span style="width:170px;height:42px;background:#1a2138;border-radius:6px"></span><span style="width:78px;height:42px;background:#6fd8ff;color:#05202c;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">search</span>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:376,&quot;height&quot;:806}}"></script>
+</body>
+</html>

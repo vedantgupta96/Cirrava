@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js" integrity="sha384-Ukv1p/xTma6P4/2bY5KzWBw+ydSpXmhCMtyciIQVDJ1RmOxtCYNMF1uXT9T63H67" crossorigin="anonymous"></script>
+<style>@keyframes ifPulse { 0%,100%{ opacity:.5 } 50%{ opacity:1 } }</style>
+</helmet>
+<div style="width:376px;background:#000;border-radius:46px;padding:9px;box-shadow:0 30px 70px -18px rgba(10,20,60,.75),0 0 0 1px rgba(255,255,255,.06)">
+<div style="position:relative;height:788px;border-radius:38px;overflow:hidden;background:#05070f;font-family:'Space Grotesk',system-ui,sans-serif;color:#eaf0ff">
+
+<div style="position:relative;z-index:6;display:flex;align-items:center;justify-content:space-between;padding:14px 26px 4px;font-size:14px;font-weight:600">
+<span>9:41</span>
+<div style="position:absolute;left:50%;top:16px;transform:translateX(-50%);width:9px;height:9px;background:#000;border-radius:50%"></div>
+<span style="font-size:12px;letter-spacing:1px">5G ▮▮▮▯</span>
+</div>
+
+<div style="position:relative;z-index:6;display:flex;align-items:center;justify-content:space-between;padding:8px 24px 0">
+<span style="font-size:11px;letter-spacing:5px;color:#8296c9">CONTRAIL</span>
+<div style="display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;border-radius:50%;background:#6fd8ff;box-shadow:0 0 8px #6fd8ff;animation:ifPulse 1.6s ease-in-out infinite"></span><span style="font-family:'Space Mono',monospace;font-size:12px;color:#6fd8ff;font-weight:700">IN FLIGHT</span></div>
+</div>
+
+<x-import component-from-global-scope="contrail-globe" from="./geo-globe.js" data-main-prog="0.42" data-w="358" data-h="352" style="margin-top:-6px" hint-size="358px,352px"></x-import>
+
+<div style="text-align:center;margin-top:-2px">
+<div style="font-size:11px;letter-spacing:3px;color:#8296c9">TIME TO GO</div>
+<div style="font-size:56px;font-weight:700;letter-spacing:-2px;line-height:1;margin-top:4px">2<span style="font-size:26px;color:#8296c9">h </span>18<span style="font-size:26px;color:#8296c9">m</span></div>
+<div style="font-size:13.5px;color:#8296c9;margin-top:6px">1,504 mi to New York · lands <b style="color:#6fd8ff">2:56 AM</b> local</div>
+</div>
+
+<div style="display:flex;gap:10px;padding:20px 20px 0">
+<div style="flex:1;background:rgba(120,150,220,.08);border:1px solid rgba(120,150,220,.16);border-radius:13px;padding:11px 12px;text-align:center"><div style="font-size:10px;color:#8296c9;letter-spacing:1px">ALTITUDE</div><div style="font-family:'Space Mono',monospace;font-size:17px;font-weight:700;margin-top:3px">38,000</div></div>
+<div style="flex:1;background:rgba(120,150,220,.08);border:1px solid rgba(120,150,220,.16);border-radius:13px;padding:11px 12px;text-align:center"><div style="font-size:10px;color:#8296c9;letter-spacing:1px">SPEED</div><div style="font-family:'Space Mono',monospace;font-size:17px;font-weight:700;margin-top:3px">561<span style="font-size:11px;color:#8296c9"> mph</span></div></div>
+<div style="flex:1;background:rgba(120,150,220,.08);border:1px solid rgba(120,150,220,.16);border-radius:13px;padding:11px 12px;text-align:center"><div style="font-size:10px;color:#8296c9;letter-spacing:1px">TAILWIND</div><div style="font-family:'Space Mono',monospace;font-size:17px;font-weight:700;margin-top:3px;color:#6fd8ff">+42</div></div>
+</div>
+
+<div style="display:flex;align-items:flex-start;gap:10px;margin:20px 26px 0">
+<span style="margin-top:5px;width:8px;height:8px;flex:none;border-radius:50%;background:#6fd8ff;box-shadow:0 0 12px #6fd8ff"></span>
+<div style="font-size:14.5px;line-height:1.45;color:#c6d2f2">Making up time over Nebraska — now only <b style="color:#6fd8ff">25 min behind</b> schedule. Somewhere below: Grand Island, NE.</div>
+</div>
+
+<!-- paper stub -->
+<div style="position:absolute;left:0;right:0;bottom:0;background:#f2ece0;color:#211d16;padding:20px 24px 40px">
+<div style="position:absolute;top:-8px;left:0;right:0;height:16px;background:radial-gradient(circle at 8px 8px,#05070f 5px,transparent 5.5px);background-size:24px 16px;background-position:4px 0"></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;font-family:'Space Mono',monospace">
+<span style="font-size:10px;letter-spacing:2px;color:#8a7d63">ON ARRIVAL · JFK</span>
+<span style="font-size:10px;letter-spacing:2px;color:#8a7d63">NW 472</span>
+</div>
+<div style="display:flex;justify-content:space-between;margin-top:14px;font-family:'Space Mono',monospace">
+<div><div style="font-size:10px;color:#8a7d63">GATE</div><div style="font-size:24px;font-weight:700;margin-top:2px">B4</div></div>
+<div><div style="font-size:10px;color:#8a7d63">BAGGAGE</div><div style="font-size:24px;font-weight:700;margin-top:2px">7</div></div>
+<div style="text-align:right"><div style="font-size:10px;color:#8a7d63">LANDS</div><div style="font-size:24px;font-weight:700;margin-top:2px">2:56A</div></div>
+</div>
+</div>
+
+<div style="position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:110px;height:4px;border-radius:2px;background:#211d16;opacity:.55;z-index:6"></div>
+
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:376,&quot;height&quot;:806}}"></script>
+</body>
+</html>

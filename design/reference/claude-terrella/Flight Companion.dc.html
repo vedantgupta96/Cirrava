@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#e8e5df;font-family:'Space Grotesk',system-ui,sans-serif}
+a{color:#2a78d6}a:hover{color:#1a5fb0}
+.dv-turn{padding:48px 52px 40px}
+.dv-thd{display:flex;align-items:baseline;gap:12px;margin:0 0 8px}
+.dv-tid{font:700 11px 'Space Mono',monospace;padding:4px 9px;background:#1a1a1a;color:#fff;border-radius:5px;text-decoration:none}
+.dv-tname{font:600 15px/1.2 'Space Grotesk',sans-serif;color:#1a1a1a}
+.dv-sub{font:400 13px/1.5 'Space Grotesk',sans-serif;color:#6a665e;max-width:640px;margin:0 0 30px}
+.dv-opts{display:flex;flex-wrap:wrap;gap:44px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:14px;scroll-margin-top:20px}
+.dv-olabel{display:flex;align-items:baseline;gap:9px;font:400 13px/1.3 'Space Grotesk',sans-serif;color:#4a463f}
+.dv-olabel b{font-weight:600;color:#1a1a1a}
+.dv-oid{font:700 11px 'Space Mono',monospace;padding:4px 8px;background:rgba(0,0,0,.09);color:#1a1a1a;border-radius:6px;text-decoration:none}
+.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}
+.dv-pair{display:flex;gap:26px;align-items:flex-start}
+.dv-plat{font:700 10px 'Space Mono',monospace;letter-spacing:2px;color:#8a867d;margin:0 0 10px;text-align:center}
+.dv-desc{font:400 12px/1.5 'Space Grotesk',sans-serif;color:#6a665e;max-width:400px}
+.dv-next{margin:34px 0 0;font:13px/1.6 'Space Grotesk',sans-serif;color:#6a665e}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t4">
+<div class="dv-thd"><a class="dv-tid" href="#t4">4</a><span class="dv-tname">Completing the system — remaining states, flows, and platform divergence</span></div>
+<p class="dv-sub">Boarding (cyan, all-clear), cancelled (red only when it matters, with rebooking as the hero), the add-flight flow, first-run onboarding, and Home diverging properly per platform — Material You FAB + nav bar on Android, dashed inline row + translucent tab bar on iOS.</p>
+<div class="dv-opts">
+
+<div class="dv-opt" id="4a">
+<div class="dv-olabel"><a class="dv-oid" href="#4a">4a</a><b>Boarding</b> — group chips, doors-close countdown, scannable stub</div>
+<div class="dv-card" style="background:none;border:none;box-shadow:none"><dc-import name="Boarding-Terrella" hint-size="376px,806px"></dc-import></div>
+<p class="dv-desc">Plane's at the gate (on the globe, too). The paper stub becomes the actual boarding pass: seat, group, gate, barcode.</p>
+</div>
+
+<div class="dv-opt" id="4b">
+<div class="dv-olabel"><a class="dv-oid" href="#4b">4b</a><b>Cancelled</b> — plain words, rebooking first, your rights on paper</div>
+<div class="dv-card" style="background:none;border:none;box-shadow:none"><dc-import name="Cancelled-Terrella" hint-size="376px,806px"></dc-import></div>
+<p class="dv-desc">No map — nothing to track. "This flight won't fly tonight," why, and two concrete ways out, best one pre-lit. The stub explains vouchers and rights.</p>
+</div>
+
+<div class="dv-opt" id="4c">
+<div class="dv-olabel"><a class="dv-oid" href="#4c">4c</a><b>Track a flight</b> — one field, instant results, email import hint</div>
+<div class="dv-card" style="background:none;border:none;box-shadow:none"><dc-import name="Search-Terrella" hint-size="376px,806px"></dc-import></div>
+<p class="dv-desc">Flight number in giant mono as you type; results appear above the keyboard with one-tap Track.</p>
+</div>
+
+<div class="dv-opt" id="4d">
+<div class="dv-olabel"><a class="dv-oid" href="#4d">4d</a><b>Onboarding</b> — the passport globe as the opening shot</div>
+<div class="dv-card" style="background:none;border:none;box-shadow:none"><dc-import name="Onboarding-Terrella" hint-size="376px,806px"></dc-import></div>
+<p class="dv-desc">First screen sells the promise: real routes on a real globe, three claims, two sign-in paths, and a no-signup sample flight.</p>
+</div>
+
+<div class="dv-opt" id="4e">
+<div class="dv-olabel"><a class="dv-oid" href="#4e">4e</a><b>Platform divergence</b> — same Home, native manners on each OS</div>
+<div class="dv-pair">
+<div><div class="dv-plat">ANDROID · MATERIAL YOU</div><dc-import name="Home-Terrella" platform="android" hint-size="376px,806px"></dc-import></div>
+<div><div class="dv-plat">iOS</div><dc-import name="Home-Terrella" platform="ios" hint-size="376px,806px"></dc-import></div>
+</div>
+<p class="dv-desc">Android: amber FAB, M3 nav bar with active pill, punch-hole. iOS: inline add row, translucent tab bar, Dynamic Island. Identical content, native feel.</p>
+</div>
+
+</div>
+<p class="dv-next">Try next: "tablet split-view layout" · "friend-sharing web link view" · "design-system handoff doc for Claude Code"</p>
+</section>
+
+<section class="dv-turn" id="t3">
+<div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname">The app around <a class="dv-oid" href="#2a">2a</a> — Terrella becomes a system</span></div>
+<p class="dv-sub">Committed to the Terrella language: night sky, real geography, <b>amber = your aircraft</b>, <b>cyan = your route</b>, <b>paper = your documents</b>. Screens shown on Android; the platform-divergence pass (Material You / iOS treatments) comes after content locks.</p>
+<div class="dv-opts">
+
+<div class="dv-opt" id="3a">
+<div class="dv-olabel"><a class="dv-oid" href="#3a">3a</a><b>Home · Your trips</b> — live map hero, quiet rows, one tap to track</div>
+<div class="dv-card" style="background:none;border:none;box-shadow:none"><dc-import name="Home-Terrella" hint-size="376px,806px"></dc-import></div>
+<p class="dv-desc">The next flight owns the screen with a live corridor map and the delay chip; later trips are calm one-line rows. Status dots reuse the system colors.</p>
+</div>
+
+<div class="dv-opt" id="3b">
+<div class="dv-olabel"><a class="dv-oid" href="#3b">3b</a><b>In flight</b> — the globe shows real progress, the stub turns into arrival facts</div>
+<div class="dv-card" style="background:none;border:none;box-shadow:none"><dc-import name="FlightDetail-Inflight" hint-size="376px,806px"></dc-import></div>
+<p class="dv-desc">Same anatomy as <a class="dv-oid" href="#2a">2a</a>, different state: solid route to the plane's position, "time to go" as the hero number, cyan (all clear) instead of amber, and the paper stub now answers what you'll need on landing.</p>
+</div>
+
+<div class="dv-opt" id="3c">
+<div class="dv-olabel"><a class="dv-oid" href="#3c">3c</a><b>Passport</b> — your year drawn on the globe, stamps on paper</div>
+<div class="dv-card" style="background:none;border:none;box-shadow:none"><dc-import name="Passport-Terrella" hint-size="376px,806px"></dc-import></div>
+<p class="dv-desc">Every route you flew as real great circles, big honest numbers, and arrival stamps rendered like a real passport page on the paper strip.</p>
+</div>
+
+<div class="dv-opt" id="3d">
+<div class="dv-olabel"><a class="dv-oid" href="#3d">3d</a><b>Lock screens</b> — iOS Live Activity + Android Live Update, same language</div>
+<div class="dv-card" style="background:none;border:none;box-shadow:none;width:778px"><dc-import name="LockScreens-Terrella" hint-size="778px,806px"></dc-import></div>
+<p class="dv-desc">The cross-platform differentiator: identical information hierarchy in each OS's native container — glass Live Activity card on iOS, promoted Live Update notification with progress track on Android.</p>
+</div>
+
+</div>
+<p class="dv-next">Try next: "cancelled/disrupted state" · "search + add-flight flow and onboarding" · "platform divergence pass on <a class="dv-oid" href="#3a">3a</a>" · "friend-sharing web link view"</p>
+</section>
+
+<section class="dv-turn" id="t2">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Terrella — the chosen direction (flight detail, delayed state)</span></div>
+<p class="dv-sub">Where the system started: the delayed state on the living globe, with real Natural Earth geometry and the inbound SEA leg as the single delay signal. Kept as the reference screen; superseded explorations removed.</p>
+<div class="dv-opts">
+
+<div class="dv-opt" id="2a">
+<div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a><b>Terrella</b> — living globe from space, rolling numerals, paper stub</div>
+<div class="dv-pair">
+<div><div class="dv-plat">ANDROID</div><dc-import name="FlightDetail-Terrella" platform="android" hint-size="376px,806px"></dc-import></div>
+<div><div class="dv-plat">iOS</div><dc-import name="FlightDetail-Terrella" platform="ios" hint-size="376px,806px"></dc-import></div>
+</div>
+<p class="dv-desc">An orthographic globe with real coastlines, slowly breathing. Your planned route is a dashed cool arc; the amber line is your actual aircraft crossing Oregon. Departure time rolls odometer-style from 5:40 to 6:25. The boarding pass is literal paper torn across the bottom.</p>
+</div>
+
+</div>
+<p class="dv-next">The full system built from this lives in turns <a class="dv-tid" href="#t4">4</a> and <a class="dv-tid" href="#t3">3</a> above.</p>
+</section>
+
+
+</x-dc>
+</body>
+</html>
