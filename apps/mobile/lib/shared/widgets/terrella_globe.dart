@@ -30,7 +30,21 @@ class _TerrellaGlobeState extends State<TerrellaGlobe>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 9),
-    )..repeat();
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Honour reduced motion: hold a static frame and stop the ticker entirely
+    // rather than animating invisibly. Leaving it running also strands a
+    // pending timer, which is invalid once the tree is disposed (e.g. tests).
+    if (MediaQuery.disableAnimationsOf(context)) {
+      if (_controller.isAnimating) _controller.stop();
+      _controller.value = 0.25;
+    } else if (!_controller.isAnimating) {
+      _controller.repeat();
+    }
   }
 
   @override

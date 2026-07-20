@@ -99,8 +99,21 @@ class FlightSnapshot {
   Duration get arrivalDelay =>
       estimatedArrivalUtc.difference(scheduledArrivalUtc);
 
+  /// A Cached Flight State is considered stale once its last accepted
+  /// observation is older than this threshold.
+  static const staleThreshold = Duration(minutes: 15);
+
+  /// Whether an observation taken at [observedAt] is stale as of [now].
+  ///
+  /// Exposed as a pure function so freshness-facing widgets can share the
+  /// single staleness rule without holding a full snapshot.
+  static bool isStaleFor({
+    required DateTime observedAt,
+    required DateTime now,
+  }) => now.toUtc().difference(observedAt.toUtc()) > staleThreshold;
+
   bool isStaleAt(DateTime now) =>
-      now.difference(observedAt) > const Duration(minutes: 15);
+      isStaleFor(observedAt: observedAt, now: now);
 
   bool get isCancelled => disruptions.contains(DisruptionCondition.cancelled);
 }

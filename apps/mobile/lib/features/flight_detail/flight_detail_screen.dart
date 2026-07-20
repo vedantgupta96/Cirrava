@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +7,7 @@ import '../../app/providers.dart';
 import '../../core/domain/flight.dart';
 import '../../design_system/app_colors.dart';
 import '../../shared/formatters/flight_formatters.dart';
+import '../../shared/widgets/freshness_indicator.dart';
 import '../../shared/widgets/terrella_globe.dart';
 import '../../shared/widgets/torn_paper_card.dart';
 
@@ -17,37 +19,52 @@ class FlightDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final flight = ref.watch(flightProvider(flightId));
+
+    // Cached state is real state: once we have an accepted Cached Flight State,
+    // keep showing it even if a later read is loading or fails. A failed
+    // refresh never replaces accepted state with an error screen
+    // (v1-experience.md, Cached and Offline Behavior).
+    final cached = flight.value;
+
     return Scaffold(
       key: const Key('flight-detail-screen'),
       body: SafeArea(
         bottom: false,
-        child: flight.when(
-          loading: () =>
-              const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-          error: (error, _) => _MissingFlight(
-            message: 'Cirrava could not load this flight.',
-            onBack: () => context.go('/'),
-          ),
-          data: (value) {
-            if (value == null) {
-              return _MissingFlight(
-                message: 'This flight is no longer stored on this device.',
-                onBack: () => context.go('/'),
+        child: Builder(
+          builder: (context) {
+            if (cached != null) {
+              final content = cached.isCancelled
+                  ? _CancelledFlightDetail(flight: cached)
+                  : _ActiveFlightDetail(flight: cached);
+              return Column(
+                children: [
+                  _DetailHeader(
+                    flight: cached,
+                    onBack: () =>
+                        context.canPop() ? context.pop() : context.go('/'),
+                    onStopTracking: () =>
+                        _stopTracking(context, ref, cached.id),
+                  ),
+                  _FreshnessStrip(
+                    observedAt: cached.observedAt,
+                    refreshFailed: flight.hasError,
+                  ),
+                  Expanded(child: content),
+                ],
               );
             }
-            final content = value.isCancelled
-                ? _CancelledFlightDetail(flight: value)
-                : _ActiveFlightDetail(flight: value);
-            return Column(
-              children: [
-                _DetailHeader(
-                  flight: value,
-                  onBack: () =>
-                      context.canPop() ? context.pop() : context.go('/'),
-                  onStopTracking: () => _stopTracking(context, ref, value.id),
-                ),
-                Expanded(child: content),
-              ],
+
+            // No accepted state yet: only here may we show loading / not-found.
+            if (flight.isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(strokeWidth: 2),
+              );
+            }
+            return _MissingFlight(
+              message: flight.hasError
+                  ? 'Cirrava could not load this flight.'
+                  : 'This flight is no longer stored on this device.',
+              onBack: () => context.go('/'),
             );
           },
         ),
@@ -101,13 +118,17 @@ class _DetailHeader extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          Text(
-            flight.operatingFlightNumber,
-            style: const TextStyle(
-              color: AppColors.muted,
-              fontFamily: 'SpaceMono',
-              fontSize: 11.5,
-              fontWeight: FontWeight.w700,
+          Flexible(
+            child: Text(
+              flight.operatingFlightNumber,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: AppColors.muted,
+                fontFamily: 'SpaceMono',
+                fontSize: 11.5,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
           PopupMenuButton<String>(
@@ -122,6 +143,38 @@ class _DetailHeader extends StatelessWidget {
             icon: const Icon(Icons.more_horiz_rounded, color: AppColors.muted),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Full-width Data Freshness strip shown directly under the header.
+///
+/// Kept on its own line (rather than crowded into the header row) so the label
+/// has room to grow with system text scaling and longer stale copy without
+/// overflowing.
+class _FreshnessStrip extends StatelessWidget {
+  const _FreshnessStrip({
+    required this.observedAt,
+    required this.refreshFailed,
+  });
+
+  final DateTime observedAt;
+  final bool refreshFailed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 2, 16, 0),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: FreshnessIndicator(
+          observedAt: observedAt,
+          now: clock.now().toUtc(),
+          // A failed refresh is itself a freshness signal: treat the shown
+          // state as potentially out of date.
+          stale: refreshFailed ? true : null,
+        ),
       ),
     );
   }
@@ -205,29 +258,35 @@ class _LiveState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 6,
-          height: 6,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: color,
-            boxShadow: [BoxShadow(color: color, blurRadius: 8)],
+    // Status is conveyed by text and a labelled shape, never colour alone
+    // (PRODUCT.md accessibility gate).
+    return Semantics(
+      label: 'Flight status: $label',
+      excludeSemantics: true,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 6,
+            height: 6,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: color,
+              boxShadow: [BoxShadow(color: color, blurRadius: 8)],
+            ),
           ),
-        ),
-        const SizedBox(width: 7),
-        Text(
-          label,
-          style: TextStyle(
-            color: color == AppColors.amber ? AppColors.amberLight : color,
-            fontFamily: 'SpaceMono',
-            fontSize: 10.5,
-            fontWeight: FontWeight.w700,
+          const SizedBox(width: 7),
+          Text(
+            label,
+            style: TextStyle(
+              color: color == AppColors.amber ? AppColors.amberLight : color,
+              fontFamily: 'SpaceMono',
+              fontSize: 10.5,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -421,7 +480,7 @@ class _InflightHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final remaining = flight.estimatedArrivalUtc.difference(
-      DateTime.now().toUtc(),
+      clock.now().toUtc(),
     );
     final hours = remaining.isNegative ? 0 : remaining.inHours;
     final minutes = remaining.isNegative
@@ -478,7 +537,7 @@ class _FlightNarrative extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isStale = flight.isStaleAt(DateTime.now().toUtc());
+    final isStale = flight.isStaleAt(clock.now().toUtc());
     final delayed = flight.departureDelay.inMinutes > 0;
     final color = isStale
         ? AppColors.muted
@@ -486,7 +545,7 @@ class _FlightNarrative extends StatelessWidget {
         ? AppColors.amber
         : AppColors.cyan;
     final message = isStale
-        ? 'This update may be out of date. Cirrava last saw this flight ${relativeFreshness(flight.observedAt, DateTime.now().toUtc()).toLowerCase()}.'
+        ? 'This update may be out of date. Cirrava last saw this flight ${relativeFreshness(flight.observedAt, clock.now().toUtc()).toLowerCase()}.'
         : delayed
         ? 'Departure moved ${delayLabel(flight.departureDelay)}. Your current gate is ${flight.originGate ?? 'not assigned yet'}, and the arrival estimate has moved with it.'
         : 'Everything looks steady. Gate ${flight.originGate ?? 'details are still pending'} and the current departure estimate match the schedule.';
