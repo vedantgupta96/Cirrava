@@ -250,7 +250,7 @@ class _TrackedFlightHero extends StatelessWidget {
                               const SizedBox(height: 4),
                               Text(
                                 '${airportDate(flight.estimatedDepartureUtc, flight.originTimeZone)} · ${flight.operatingFlightNumber} · ${flight.operatingCarrierName}',
-                                maxLines: 1,
+                                maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),

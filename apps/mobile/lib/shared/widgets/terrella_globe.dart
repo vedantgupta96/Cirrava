@@ -57,16 +57,18 @@ class _TerrellaGlobeState extends State<TerrellaGlobe>
   Widget build(BuildContext context) {
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
     return RepaintBoundary(
-      child: SizedBox(
-        height: widget.height,
-        width: double.infinity,
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, _) => CustomPaint(
-            painter: _TerrellaGlobePainter(
-              phase: reduceMotion ? 0.25 : _controller.value,
-              routeProgress: widget.progress,
-              compact: widget.compact,
+      child: ClipRect(
+        child: SizedBox(
+          height: widget.height,
+          width: double.infinity,
+          child: AnimatedBuilder(
+            animation: _controller,
+            builder: (context, _) => CustomPaint(
+              painter: _TerrellaGlobePainter(
+                phase: reduceMotion ? 0.25 : _controller.value,
+                routeProgress: widget.progress,
+                compact: widget.compact,
+              ),
             ),
           ),
         ),
