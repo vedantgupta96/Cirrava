@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +8,7 @@ import '../../core/domain/flight.dart';
 import '../../core/domain/flight_follow.dart';
 import '../../design_system/app_colors.dart';
 import '../../shared/formatters/flight_formatters.dart';
+import '../../shared/widgets/freshness_indicator.dart';
 import '../../shared/widgets/terrella_globe.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -16,6 +18,13 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final follows = ref.watch(activeFollowsProvider);
     final isIos = Theme.of(context).platform == TargetPlatform.iOS;
+
+    // Cached state is real state: once we have an accepted list of active
+    // follows, keep showing it even if a later read is loading or fails. A
+    // failed refresh never replaces accepted state with an error screen
+    // (v1-experience.md, Cached and Offline Behavior). An empty list is a
+    // legitimate "no follows" state, not a lack of data.
+    final cached = follows.value;
 
     return Scaffold(
       key: const Key('home-screen'),
@@ -34,17 +43,26 @@ class HomeScreen extends ConsumerWidget {
             ),
       body: SafeArea(
         bottom: false,
-        child: follows.when(
-          loading: () => const _LoadingHome(),
-          error: (error, _) => _HomeError(
-            onRetry: () {
-              ref.invalidate(activeFollowsProvider);
-            },
-          ),
-          data: (items) => _HomeContent(
-            followedFlight: items.firstOrNull,
-            showInlineAdd: isIos,
-          ),
+        child: Builder(
+          builder: (context) {
+            if (cached != null) {
+              return _HomeContent(
+                followedFlight: cached.firstOrNull,
+                showInlineAdd: isIos,
+                refreshFailed: follows.hasError,
+              );
+            }
+
+            // No accepted state yet: only here may we show loading / error.
+            if (follows.isLoading) {
+              return const _LoadingHome();
+            }
+            return _HomeError(
+              onRetry: () {
+                ref.invalidate(activeFollowsProvider);
+              },
+            );
+          },
         ),
       ),
     );
@@ -55,10 +73,12 @@ class _HomeContent extends StatelessWidget {
   const _HomeContent({
     required this.followedFlight,
     required this.showInlineAdd,
+    this.refreshFailed = false,
   });
 
   final FollowedFlight? followedFlight;
   final bool showInlineAdd;
+  final bool refreshFailed;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +130,10 @@ class _HomeContent extends StatelessWidget {
           sliver: SliverToBoxAdapter(
             child: followedFlight == null
                 ? const _EmptyFlightHero()
-                : _TrackedFlightHero(item: followedFlight!),
+                : _TrackedFlightHero(
+                    item: followedFlight!,
+                    refreshFailed: refreshFailed,
+                  ),
           ),
         ),
         if (showInlineAdd)
@@ -147,9 +170,10 @@ class _Wordmark extends StatelessWidget {
 }
 
 class _TrackedFlightHero extends StatelessWidget {
-  const _TrackedFlightHero({required this.item});
+  const _TrackedFlightHero({required this.item, this.refreshFailed = false});
 
   final FollowedFlight item;
+  final bool refreshFailed;
 
   @override
   Widget build(BuildContext context) {
@@ -203,58 +227,76 @@ class _TrackedFlightHero extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(18, 14, 18, 17),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${flight.originCode}  →  ${flight.destinationCode}',
-                            style: const TextStyle(
-                              color: AppColors.ink,
-                              fontFamily: 'SpaceMono',
-                              fontSize: 23,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: -1,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '${airportDate(flight.estimatedDepartureUtc, flight.originTimeZone)} · ${flight.operatingFlightNumber} · ${flight.operatingCarrierName}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Column(
+                    Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        const Text(
-                          'DEPARTS',
-                          style: TextStyle(
-                            color: AppColors.muted,
-                            fontSize: 10,
-                            letterSpacing: 2,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${flight.originCode}  →  ${flight.destinationCode}',
+                                style: const TextStyle(
+                                  color: AppColors.ink,
+                                  fontFamily: 'SpaceMono',
+                                  fontSize: 23,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: -1,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '${airportDate(flight.estimatedDepartureUtc, flight.originTimeZone)} · ${flight.operatingFlightNumber} · ${flight.operatingCarrierName}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 2),
-                        Text(
-                          airportTime(
-                            flight.estimatedDepartureUtc,
-                            flight.originTimeZone,
-                          ),
-                          style: TextStyle(
-                            color: delayed ? AppColors.amber : AppColors.ink,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          ),
+                        const SizedBox(width: 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const Text(
+                              'DEPARTS',
+                              style: TextStyle(
+                                color: AppColors.muted,
+                                fontSize: 10,
+                                letterSpacing: 2,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              airportTime(
+                                flight.estimatedDepartureUtc,
+                                flight.originTimeZone,
+                              ),
+                              style: TextStyle(
+                                color: delayed
+                                    ? AppColors.amber
+                                    : AppColors.ink,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
+                    ),
+                    const SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: FreshnessIndicator(
+                        observedAt: flight.observedAt,
+                        now: clock.now().toUtc(),
+                        // A failed refresh is itself a freshness signal:
+                        // treat the shown state as potentially out of date.
+                        stale: refreshFailed ? true : null,
+                      ),
                     ),
                   ],
                 ),
