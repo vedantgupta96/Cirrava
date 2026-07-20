@@ -1,0 +1,6 @@
+#include "../../Flutter/Flutter-Debug.xcconfig"
+#include "Warnings.xcconfig"
+
+// Local debug desktop runs don't need code signing.
+CODE_SIGNING_ALLOWED = NO
+CODE_SIGN_IDENTITY =
