@@ -1,0 +1,17 @@
+{
+  "name": "@cirrava/flight-domain",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Provider-independent flight identity, time handling, and normalized status domain logic for Cirrava.",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "typescript": "^5.6.3"
+  }
+}
