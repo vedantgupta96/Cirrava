@@ -1,8 +1,7 @@
 /**
  * Public API surface for `@cirrava/flight-domain`: provider-independent
- * flight identity, time handling, and normalized status. See package README
- * of the spec (packages/flight-domain) for scope — snapshot diffing and
- * event generation (§14) are a follow-up slice, not included here.
+ * flight identity, time handling, normalized status, canonical Flight
+ * Snapshots, and Flight Event generation (§8, §9, §10, §14).
  */
 export type {
   FlightPhase,
@@ -35,3 +34,18 @@ export {
   computeDelayMinutes,
   normalizeStatus,
 } from "./status.ts";
+
+export type { FlightSnapshot, FlightSnapshotInput } from "./snapshot.ts";
+export {
+  canonicalizeSnapshot,
+  stableStringify,
+  hashSnapshotPayload,
+  isDuplicateSnapshot,
+} from "./snapshot.ts";
+
+export type {
+  FlightEvent,
+  FlightEventType,
+  GenerateFlightEventsOptions,
+} from "./events.ts";
+export { generateFlightEvents, dedupeEvents } from "./events.ts";
