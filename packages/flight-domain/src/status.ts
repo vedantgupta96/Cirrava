@@ -6,9 +6,6 @@
  * the kind carried on a Flight Snapshot. Undocumented/unknown values degrade
  * to UNKNOWN rather than throwing or leaking the raw string (§14: "never
  * trust undocumented enum values").
- *
- * This slice does not diff snapshots or generate Flight Events (§14) — that
- * is a follow-up slice.
  */
 import type { DisruptionCondition, FlightPhase, NormalizedFlightStatus } from "./types.ts";
 
