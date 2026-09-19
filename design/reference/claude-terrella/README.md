@@ -11,3 +11,8 @@ signals, cyan planned routes, warm paper travel documents, Space Grotesk body
 type, and Space Mono operational data. Product scope remains limited to one
 anonymous followed flight; future trips, radar, passport, and authentication
 surfaces shown in the reference are not part of this vertical slice.
+
+The canvas references a `Passport-Terrella` component, but that component and
+its rendered capture were not included in this export. The confirmed
+reconstruction and sharing-flow brief lives in
+`docs/product/flight-passport-design.md`.
